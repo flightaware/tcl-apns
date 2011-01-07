@@ -1,0 +1,25 @@
+We have been using this code in a production environment since May
+2010.  It is currently delivering nearly 20k successful push alerts to
+our users per day and we expect that it should continue to be able to
+scale to much higher levels.
+
+This code has been developed on FreeBSD 8.0 with Tcl 8.5.9, but the
+code does not have any unusual OS dependencies and should work on
+other Tcl-supported environments.
+
+Your iPhone application will need to be responsible for communicating
+the deviceToken to your backend in advance.  The basic syntax of the
+transmission will look like this:
+
+         set json "{\"aps\": \"hello message $i\"}"
+         send_apns "123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF" $json
+
+The above send_apns is a blocking call, but event driven handlers are
+used in the background to perform all socket connecting, reading,
+writing, and timeouts.  The network connection is kept persistent
+between calls to send_apns in order to maximize throughput.
+
+Periodically, a separate proc "connect_and_receive_apns_feedback" can
+be called to retrieve a list of deviceTokens that have bounced by the
+APNS, and you can process the list to remove those dead devices from
+your database.
