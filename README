@@ -1,7 +1,10 @@
-We have been using this code in a production environment since May
-2010.  It is currently delivering nearly 20k successful push alerts to
-our users per day and we expect that it should continue to be able to
-scale to much higher levels.
+This Tcl code interfaces with the Apple Push Notification Service (APNS)
+to allow you to send iPhone/iOS alerts.
+
+We have been using this code in a production environment since May 2010.
+It is currently delivering nearly 20k successful push alerts to our users
+per day (with a peak of nearly 400 alerts per minute) and we expect
+that it should continue to be able to scale to much higher levels.
 
 This code has been developed on FreeBSD 8.0 with Tcl 8.5.9, but the
 code does not have any unusual OS dependencies and should work on
@@ -12,7 +15,8 @@ the deviceToken to your backend in advance.  The basic syntax of the
 transmission will look like this:
 
          set json "{\"aps\": \"hello message $i\"}"
-         send_apns "123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF" $json
+         set deviceToken "123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF" 
+         send_apns $deviceToken $json
 
 The above send_apns is a blocking call, but event driven handlers are
 used in the background to perform all socket connecting, reading,
